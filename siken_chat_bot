@@ -1,0 +1,203 @@
+#The purpose of this is to explore 4 different chatbots, each of which mix lines from Richard
+# Siken's poetry, stock dating questions, and standard therapist questions in different proportions.
+
+import random
+import unittest
+
+class siken_chat_bot:
+
+    def __init__(self, poem, dating_qs, therapist_qs):
+        self._poem = poem
+        self._dating_qs = dating_qs
+        self._therapist_qs = therapist_qs
+
+    @property
+    def poem(self):
+        return self._poem
+
+    @poem.setter
+    def poem(self, poem):
+        if type(poem) is not list:
+            raise ValueError("the inputted value for poem isn't a list and it must be")
+        self._poem = poem
+
+    @property
+    def dating_qs(self):
+        return self._dating_qs
+
+    @dating_qs.setter
+    def dating_qs(self, dating_qs):
+        if type(dating_qs) is not list:
+            raise ValueError("the inputted value for for a list isn't a list and it must be")
+        self._dating_qs = dating_qs
+
+    @property
+    def therapist_qs(self):
+        return self._therapist_qs
+
+    @therapist_qs.setter
+    def therapist_qs(self, therapist_qs):
+        if type(therapist_qs) is not list:
+            raise ValueError("the inputted value for for a list isn't a list and it must be")
+        self._therapist_qs = therapist_qs
+
+    def rand_siken_line(self):
+        return random.choice(self.poem)
+
+    def rand_dating_line(self):
+        return random.choice(self.dating_qs)
+
+    def rand_therapist_line(self):
+        return random.choice(self.therapist_qs)
+
+    def chat(self):
+        safe_word = input("before we begin, what is your safeword?\n")
+        dating_reply = input("I'll remember that. And I'll stop immediately if you say it.\n")
+        siken_reply = ""
+        their_replies = []
+
+        while dating_reply != safe_word and siken_reply != safe_word:
+            dating_reply = input(self.rand_dating_line() + "\n")
+            if dating_reply != safe_word:
+                siken_reply = input(self.rand_siken_line() + "\n")
+            their_replies.append(dating_reply)
+            their_replies.append(siken_reply)
+            if siken_reply.__contains__("what") or siken_reply.__contains__("wtf"):
+                print(random.choice(their_replies))
+        return
+
+    def chat_nicer(self):
+        safe_word = input("before we begin, what is your safeword?\n")
+        dating_reply = input("I'll remember that. And I'll stop immediately if you say it.\n")
+        siken_reply = ""
+        their_replies = []
+        warning_words = ["fuck", "shit", "bitch",  "shut up", "cunt"]
+        bad_language_reply = ""
+
+        while dating_reply != safe_word and siken_reply != safe_word:
+            dating_reply = input(self.rand_dating_line() + "\n")
+            if dating_reply != safe_word:
+                siken_reply = input(self.rand_siken_line() + "\n")
+            their_replies.append(dating_reply)
+            their_replies.append(siken_reply)
+            for w in warning_words:
+                if w in siken_reply or w in dating_reply:
+            # if any(ele in siken_reply for ele in warning_words):
+                    bad_language_reply = input(self.rand_therapist_line() + "\n")
+                    their_replies.append(bad_language_reply)
+        return
+
+    def chat_therapist(self):
+        safe_word = input("before we begin, what is your safeword?\n")
+        dating_reply = input("I'll remember that. And I'll stop immediately if you say it.\n")
+        siken_reply = ""
+        their_replies = []
+        warning_words = ["fuck", "shit", "bitch",  "shut up", "cunt"]
+        bad_language_reply = ""
+
+        while dating_reply != safe_word and siken_reply != safe_word:
+            therapist_reply = input(self.rand_therapist_line() + "\n")
+            if therapist_reply != safe_word:
+                siken_reply = input(self.rand_siken_line() + "\n")
+            their_replies.append(therapist_reply)
+            their_replies.append(siken_reply)
+            for w in warning_words:
+                if w in siken_reply or w in therapist_reply:
+                    bad_language_reply = input(self.rand_therapist_line() + "\n")
+                    their_replies.append(bad_language_reply)
+        return
+
+    def chat_to_yourself(self):
+        safe_word = input("before we begin, what is your safeword?\n")
+        dating_reply = input("I'll remember that. And I'll stop immediately if you say it.\n")
+        siken_reply = ""
+        their_replies = []
+        warning_words = ["fuck", "shit", "bitch",  "shut up", "cunt"]
+        bad_language_reply = ""
+
+        while dating_reply != safe_word and siken_reply != safe_word:
+            if len(their_replies) > 6:
+                dating_reply = input(random.choice(their_replies))
+            else:
+                therapist_reply = input(self.rand_therapist_line() + "\n")
+                if therapist_reply != safe_word:
+                    siken_reply = input(self.rand_siken_line() + "\n")
+                their_replies.append(therapist_reply)
+                their_replies.append(siken_reply)
+                for w in warning_words:
+                    if w in siken_reply or w in therapist_reply:
+                        bad_language_reply = input(self.rand_therapist_line() + "\n")
+                        their_replies.append(bad_language_reply)
+        return
+
+poem = 'landscape with a blur of conquerors.txt'
+dating_qs = 'first_date_questions.txt'
+therapist_qs = 'therapist_questions.txt'
+poem_line_list = [line.rstrip('\n') for line in open(poem)]
+dating_qs_line_list = [line.rstrip('\n') for line in open(dating_qs)]
+therapist_qs_line_list = [line.rstrip('\n') for line in open(therapist_qs)]
+
+m = siken_chat_bot(poem_line_list, dating_qs_line_list, therapist_qs_line_list)
+# m.chat()
+#
+m.chat_nicer()
+
+# m.chat_therapist()
+
+# m.chat_to_yourself()
+
+# class TestMethods(unittest.TestCase):
+#
+#     def test_chat(self):
+#         poem = 'landscape with a blur of conquerors.txt'
+#         dating_qs = 'first_date_questions.txt'
+#         therapist_qs = 'therapist_questions.txt'
+#         poem_line_list = [line.rstrip('\n') for line in open(poem)]
+#         dating_qs_line_list = [line.rstrip('\n') for line in open(dating_qs)]
+#         m = siken_chat_bot(poem_line_list, dating_qs_line_list, therapist_qs)
+#         m.chat()
+#
+#     def test_chat_nicer(self):
+#         poem = 'landscape with a blur of conquerors.txt'
+#         dating_qs = 'first_date_questions.txt'
+#         therapist_qs = 'therapist_questions.txt'
+#         poem_line_list = [line.rstrip('\n') for line in open(poem)]
+#         dating_qs_line_list = [line.rstrip('\n') for line in open(dating_qs)]
+#         m = siken_chat_bot(poem_line_list, dating_qs_line_list, therapist_qs)
+#         m.chat_nicer()
+#
+#     def test_chat_therapist(self):
+#         poem = 'landscape with a blur of conquerors.txt'
+#         dating_qs = 'first_date_questions.txt'
+#         therapist_qs = 'therapist_questions.txt'
+#         poem_line_list = [line.rstrip('\n') for line in open(poem)]
+#         dating_qs_line_list = [line.rstrip('\n') for line in open(dating_qs)]
+#         m = siken_chat_bot(poem_line_list, dating_qs_line_list, therapist_qs)
+#         m.chat_therapist()
+
+    # def test_chat_self(self):
+    #     poem = 'landscape with a blur of conquerors.txt'
+    #     dating_qs = 'first_date_questions.txt'
+    #     therapist_qs = 'therapist_questions.txt'
+    #     poem_line_list = [line.rstrip('\n') for line in open(poem)]
+    #     dating_qs_line_list = [line.rstrip('\n') for line in open(dating_qs)]
+    #     m = siken_chat_bot(poem_line_list, dating_qs_line_list, therapist_qs)
+    #     m.chat_to_yourself()
+
+# if __name__ == 'main':
+#     poem = 'landscape with a blur of conquerors.txt'
+#     dating_qs = 'first_date_questions.txt'
+#     therapist_qs = 'therapist_questions.txt'
+#     with open(poem, 'r') as f0:
+#         data0 = f0.read()
+#         with open(dating_qs, 'r') as f1:
+#             data1 = f1.read()
+#             with open(therapist_qs, 'r') as f2:
+#                 data2 = f2.read()
+#                 poem_line_list = [line.rstrip('\n') for line in data0]
+#                 dating_qs_line_list = [line.rstrip('\n') for line in data1]
+#                 therapist_qs_line_list = [line.rstrip('\n') for line in data2]
+#
+#                 m = siken_chat_bot(poem_line_list, dating_qs_line_list, therapist_qs)
+#                 m.chat()
+    # m.chat_nicer()
